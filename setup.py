@@ -1,4 +1,5 @@
 from distutils.core import setup
+import py2exe
 
 setup(
     name='game',
@@ -9,6 +10,8 @@ setup(
     url='https://github.com/Randomneo/python_game',
     requirments=[
         'pygame==1.9.1release',
-        'enum34'
-    ]
+        'enum34',
+        'py2exe',
+    ],
+    console=['main.py']
 )

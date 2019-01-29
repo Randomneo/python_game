@@ -1,16 +1,16 @@
 import sys
 import pygame
 import time
-from . import Colors
+from . import Colors, screen_size
 from .objects.hero import Hero
-
+from pygame import key
 
 def start():
     pygame.init()
 
-    size = width, height = 640, 480
+    
 
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode(screen_size)
     hero = Hero()
 
     cur_time = time.time()
@@ -21,7 +21,10 @@ def start():
                 pygame.quit()
                 sys.exit()
 
+        keys = key.get_pressed()
+
         time_delta = time.time()-cur_time
+        hero.update_pos(keys)
         hero.update_anim(time_delta)
         cur_time = time.time()
 
