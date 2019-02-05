@@ -8,8 +8,6 @@ from pygame import key
 def start():
     pygame.init()
 
-    
-
     screen = pygame.display.set_mode(screen_size)
     hero = Hero()
 
@@ -24,9 +22,9 @@ def start():
         keys = key.get_pressed()
 
         time_delta = time.time()-cur_time
+        cur_time = time.time()
         hero.update_pos(keys)
         hero.update_anim(time_delta)
-        cur_time = time.time()
 
         screen.fill(Colors.black.value)
         hero.put_on_screen(screen)

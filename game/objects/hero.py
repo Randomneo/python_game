@@ -3,7 +3,7 @@ from pygame import Rect
 from pygame.image import load as load_img
 from pygame.transform import flip
 from .. import Colors
-from .. import screen_size
+from .. import screen_size, gravity
 import pygame
 
 
@@ -12,7 +12,9 @@ class Hero(object):
     image_path = 'game/res/hero_spritesheet.png'
     frames = 8
     animation_speed = 1.0/25
-    speed = 0.2
+    speedx = 0.2
+    speedy = 0
+    on_gorund = False
     flipx = False
     pos = {'x': 0, 'y': 0}
 
@@ -42,25 +44,25 @@ class Hero(object):
             (
                 10 + (23 + 57)*self.current_frame,
                 17,
-                self.size[0],
-                self.size[1]
+                61, 70
             )
         )
         self.surface = flip(self.surface, self.flipx, False)
         
 
     def update_pos(self, keys):
-        if keys[pygame.K_w]:
-            self.pos['y'] -= self.speed
+        self.speedy -= gravity
+        if keys[pygame.K_w] and self.on_gorund:
+            self.speedy = 0.5
         if keys[pygame.K_a]:
-            self.pos['x'] -= self.speed
+            self.pos['x'] -= self.speedx
             self.flipx = True
-        if keys[pygame.K_s]:
-            self.pos['y'] += self.speed
         if keys[pygame.K_d]:
-            self.pos['x'] += self.speed
+            self.pos['x'] += self.speedx
             self.flipx = False
+        self.pos['y'] -= self.speedy
 
+        self.on_gorund = False
         if self.pos['x'] < 0:
             self.pos['x'] = 0
         if self.pos['y'] < 0:
@@ -69,6 +71,7 @@ class Hero(object):
             self.pos['x'] = screen_size[0] - self.rect.w
         if self.pos['y'] > screen_size[1] - self.rect.h:
             self.pos['y'] = screen_size[1] - self.rect.h
+            self.on_gorund = True
 
         self.rect.x = self.pos['x']
         self.rect.y = self.pos['y']
