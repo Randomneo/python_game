@@ -3,6 +3,8 @@ import pygame
 import time
 from . import Colors, screen_size
 from .objects.hero import Hero
+from .objects.platform import Platform
+from .objects.position import Position
 from pygame import key
 
 def start():
@@ -10,6 +12,10 @@ def start():
 
     screen = pygame.display.set_mode(screen_size)
     hero = Hero()
+    platforms = []
+    for i in range(10):
+        platforms.append(Platform(Position(x=0+i*50, y=300)))
+    to_draw = [*platforms, hero]
 
     cur_time = time.time()
     time_delta = 0
@@ -23,9 +29,10 @@ def start():
 
         time_delta = time.time()-cur_time
         cur_time = time.time()
-        hero.update_pos(keys)
+        hero.update_pos(keys, platforms)
         hero.update_anim(time_delta)
 
         screen.fill(Colors.black.value)
-        hero.put_on_screen(screen)
+        for item in to_draw:
+            item.put_on_screen(screen)
         pygame.display.flip()
