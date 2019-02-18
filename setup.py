@@ -1,5 +1,4 @@
 from distutils.core import setup
-import py2exe
 
 setup(
     name='game',
@@ -11,7 +10,6 @@ setup(
     requirments=[
         'pygame==1.9.1release',
         'enum34',
-        'py2exe',
     ],
     console=['main.py']
 )

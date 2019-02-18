@@ -8,15 +8,27 @@ from .. import screen_size, gravity
 from .position import Position
 
 
+walking_sprites = (
+    20, 114,
+    47, 68,
+)
+
+
 class Hero(object):
     size = (61, 70)
     image_path = 'game/res/hero_spritesheet.png'
-    frames = 8
-    animation_speed = 1.0/25
-    speedx = 0.2
+    frames = {
+        'stay': 8,
+        'walk': 6,
+        'jump': 2,
+    }
+    animation_speed = 1.0/10
+    speedx = 0.3
     speedy = 0
     on_gorund = False
     flipx = False
+    on_walk = False
+    anim_jump = False
     pos = Position()
 
     def __init__(self, start_pos=Position(x=100, y=100)):
@@ -34,32 +46,50 @@ class Hero(object):
 
     def update_anim(self, time):
         self.last_frame_time += time
+        if self.anim_jump:
+            row = 297
+            frames = self.frames['jump']
+        elif self.on_walk:
+            row = 110
+            frames = self.frames['walk']
+        else:
+            row = 14
+            frames = self.frames['stay']
+
         while self.last_frame_time > self.animation_speed:
-            self.current_frame = (self.current_frame + 1) % self.frames
+            self.current_frame += 1
             self.last_frame_time = self.last_frame_time - self.animation_speed
+        if not self.anim_jump:
+            self.current_frame = self.current_frame % frames
+        else:
+            self.current_frame = min(self.current_frame, frames)
         self.surface.fill((0, 0, 0, 0))
         self.surface.blit(
             self.spritesheet,
             (0, 0),
             (
                 10 + (23 + 57)*self.current_frame,
-                17,
+                row,
                 61, 70
             )
         )
         self.surface = flip(self.surface, self.flipx, False)
-        
 
     def update_pos(self, keys, platforms):
+        self.on_walk = False
         self.speedy += gravity
-        if keys[pygame.K_w] and self.on_gorund:
-            self.speedy = -0.5
-        if keys[pygame.K_a]:
+        if keys[pygame.K_SPACE] and self.on_gorund:
+            self.speedy = -1
+            self.current_frame = 0
+            self.anim_jump = True
+        if keys[pygame.K_LEFT]:
             self.pos.x -= self.speedx
             self.flipx = True
-        if keys[pygame.K_d]:
+            self.on_walk = True
+        if keys[pygame.K_RIGHT]:
             self.pos.x += self.speedx
             self.flipx = False
+            self.on_walk = True
         self.pos.y += self.speedy
 
         self.on_gorund = False
@@ -73,30 +103,32 @@ class Hero(object):
             self.pos.y = screen_size[1] - self.rect.h
             self.speedy = 0
             self.on_gorund = True
+            self.anim_jump = False
 
         self.rect.x = self.pos.x
         for item in platforms:
             if self.rect.colliderect(item.rect):
-                if (keys[pygame.K_d]):
+                if (keys[pygame.K_RIGHT]):
                     self.rect.x = item.rect.x - self.rect.w
                     self.pos.x = self.rect.x
-                if (keys[pygame.K_a]):
+                if (keys[pygame.K_LEFT]):
                     self.rect.x = item.rect.x + item.rect.w
                     self.pos.x = self.rect.x
 
 
         self.rect.y = self.pos.y
-        for item in platforms:           
+        for item in platforms:
             if self.rect.colliderect(item.rect):
                 if (self.speedy > 0):
                     self.rect.y = item.rect.y - self.rect.h
                     self.speedy = 0
                     self.on_gorund = True
+                    self.anim_jump = False
                     self.pos.y = self.rect.y
                 if (self.speedy < 0):
                     self.rect.y = item.rect.y + item.rect.h
                     self.speedy = 0
                     self.pos.y = self.rect.y
-                    
+
     def put_on_screen(self, screen):
         screen.blit(self.surface, self.rect)
