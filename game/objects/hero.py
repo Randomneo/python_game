@@ -23,7 +23,7 @@ class Hero(object):
         'jump': 2,
     }
     animation_speed = 1.0/10
-    speedx = 0.3
+    speedx = 400
     speedy = 0
     on_gorund = False
     flipx = False
@@ -75,22 +75,22 @@ class Hero(object):
         )
         self.surface = flip(self.surface, self.flipx, False)
 
-    def update_pos(self, keys, platforms):
+    def update_pos(self, keys, platforms, td):
         self.on_walk = False
         self.speedy += gravity
         if keys[pygame.K_SPACE] and self.on_gorund:
-            self.speedy = -1
+            self.speedy = -700
             self.current_frame = 0
             self.anim_jump = True
         if keys[pygame.K_LEFT]:
-            self.pos.x -= self.speedx
+            self.pos.x -= self.speedx * td
             self.flipx = True
             self.on_walk = True
         if keys[pygame.K_RIGHT]:
-            self.pos.x += self.speedx
+            self.pos.x += self.speedx * td
             self.flipx = False
             self.on_walk = True
-        self.pos.y += self.speedy
+        self.pos.y += self.speedy * td
 
         self.on_gorund = False
         if self.pos.x < 0:

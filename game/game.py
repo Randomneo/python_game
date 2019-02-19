@@ -22,6 +22,8 @@ def start():
 
     cur_time = time.time()
     time_delta = 0
+    last_frame_time = 0
+    to_shoot = True
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -29,19 +31,26 @@ def start():
                 sys.exit()
 
         keys = key.get_pressed()
-        if keys[pygame.K_a]:
-            bullets.append(Bullet(hero))
-            to_draw.append(bullets[-1])
-            to_update_pos.append(bullets[-1])
+        last_frame_time += time_delta
+        while last_frame_time > 1:
+            to_shoot = True
+            last_frame_time = 0
+        if keys[pygame.K_a] and to_shoot:
+            to_shoot = False
+            bullet = Bullet(hero)
+            bullets.append(bullet)
+            to_draw.append(bullet)
+            to_update_pos.append(bullet)
 
         time_delta = time.time()-cur_time
         cur_time = time.time()
         for item in to_update_pos:
-            item.update_pos()
-        hero.update_pos(keys, platforms)
+            item.update_pos(time_delta)
+        hero.update_pos(keys, platforms, time_delta)
         hero.update_anim(time_delta)
 
         screen.fill(Colors.black.value)
+        print(to_update_pos)
         for item in to_draw:
             item.put_on_screen(screen)
         pygame.display.flip()
