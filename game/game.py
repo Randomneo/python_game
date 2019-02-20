@@ -1,22 +1,26 @@
 import sys
 import pygame
 import time
-from . import Colors, screen_size
+from . import Colors, screen_size, map_size
 from .objects.hero import Hero
 from .objects.bullet import Bullet
 from .objects.platform import Platform
 from .objects.position import Position
+from .camera import Camera
 from pygame import key
+
 
 def start():
     pygame.init()
 
     screen = pygame.display.set_mode(screen_size)
     hero = Hero()
+    camera = Camera(hero, screen)
+    camera.add_object_to_draw(hero)
     platforms = []
     for i in range(10):
         platforms.append(Platform(Position(x=0+i*50, y=300)))
-    to_draw = [*platforms, hero]
+    camera.add_objects_to_draw(platforms)
     to_update_pos = []
     bullets = []
 
@@ -39,7 +43,7 @@ def start():
             to_shoot = False
             bullet = Bullet(hero)
             bullets.append(bullet)
-            to_draw.append(bullet)
+            camera.add_object_to_draw(bullet)
             to_update_pos.append(bullet)
 
         time_delta = time.time()-cur_time
@@ -48,9 +52,8 @@ def start():
             item.update_pos(time_delta)
         hero.update_pos(keys, platforms, time_delta)
         hero.update_anim(time_delta)
+        camera.update_pos()
 
         screen.fill(Colors.black.value)
-        print(to_update_pos)
-        for item in to_draw:
-            item.put_on_screen(screen)
+        camera.draw()
         pygame.display.flip()
