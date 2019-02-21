@@ -15,17 +15,10 @@ class Camera(object):
         self.to_draw = []
 
     def add_object_to_draw(self, object):
-        if callable(object.put_on_screen):
-            self.to_draw.append(object)
-        else:
-            raise TypeError('Object dont have put_on_screen method')
+        self.to_draw.append(object)
 
     def add_objects_to_draw(self, objects):
-        if all(callable(t.put_on_screen) for t in objects):
-            self.to_draw = [*self.to_draw, *objects]
-        else:
-            raise TypeError('Object dont have put_on_screen method')
-
+        self.to_draw = [*self.to_draw, *objects]
 
     def update_pos(self, center_on_hero=True):
         if center_on_hero:
