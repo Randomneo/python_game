@@ -4,15 +4,15 @@ from pygame.transform import flip
 from pygame import Surface, SRCALPHA
 from .position import Position
 from .. import screen_size
-
+from ..core.vector2 import Vector2
 
 class Bullet(object):
-    size = (10, 10)
+    size = Vector2(x=10, y=10)
     image_path = 'game/res/bullet.png'
     speed = 700
 
     def __init__(self, hero):
-        self.surface = Surface(self.size, SRCALPHA)
+        self.surface = Surface(self.size.as_t, SRCALPHA)
         self.pos = Position()
 
         self.direction = not hero.flipx
@@ -20,12 +20,12 @@ class Bullet(object):
         self.pos.y = hero.pos.y + 20
         
         if self.direction:
-            self.pos.x += hero.size[0]
+            self.pos.x += hero.size.x
         self.spritesheet = load_img(self.image_path)
         self.surface.fill((0, 0, 0, 0))
         self.rect = Rect(
             self.pos.x, self.pos.y,
-            self.size[0], self.size[1]
+            self.size.x, self.size.y
             )
         self.current_frame = 0
         self.last_frame_time = 0
@@ -33,7 +33,7 @@ class Bullet(object):
         self.surface.blit(
             self.spritesheet,
             (0, 0),
-            (0, 0, self.size[0], self.size[1])
+            (0, 0, self.size.x, self.size.y)
         )
 
     def update_pos(self, time):

@@ -22,8 +22,8 @@ class Camera(object):
 
     def update_pos(self, center_on_hero=True):
         if center_on_hero:
-            x = self.hero.pos.x - float(self.screen_size.x)/2
-            y = self.hero.pos.y - float(self.screen_size.y)/2
+            x = self.hero.rect.x - float(self.screen_size.x)/2 + self.hero.size.x / 2
+            y = self.hero.rect.y - float(self.screen_size.y)/2 + self.hero.size.y / 2
 
         if x < 0:
             x = 0
@@ -34,8 +34,8 @@ class Camera(object):
         if y + self.screen_size.y > self.map_maxs.y:
             y = self.map_maxs.y - self.screen_size.y
 
-        self.pos.x = x
-        self.pos.y = y
+        self.pos.x = int(x)
+        self.pos.y = int(y)
 
     def draw(self):
         for o in self.to_draw:

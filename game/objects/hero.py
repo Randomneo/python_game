@@ -6,6 +6,7 @@ import pygame
 from .. import Colors
 from .. import screen_size, gravity
 from .position import Position
+from ..core.vector2 import Vector2
 
 
 walking_sprites = (
@@ -15,7 +16,7 @@ walking_sprites = (
 
 
 class Hero(object):
-    size = (61, 70)
+    size = Vector2(x=61, y=70)
     image_path = 'game/res/hero_spritesheet.png'
     frames = {
         'stay': 8,
@@ -32,14 +33,14 @@ class Hero(object):
     pos = Position()
 
     def __init__(self, start_pos=Position(x=100, y=100)):
-        self.surface = Surface(self.size, SRCALPHA)
+        self.surface = Surface(self.size.as_t, SRCALPHA)
 
         self.spritesheet = load_img(self.image_path)
         self.surface.fill((0, 0, 0, 0))
         self.pos = start_pos
         self.rect = Rect(
             self.pos.x, self.pos.y,
-            self.size[0], self.size[1]
+            self.size.x, self.size.y
             )
         self.current_frame = 0
         self.last_frame_time = 0
