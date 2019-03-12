@@ -49,6 +49,3 @@ class Bullet(BaseGameObject):
                 self.pos.x > screen_size[0] - self.rect.w or \
                 self.pos.y > screen_size[1] - self.rect.h:
             self.destroy()
-
-    def put_on_screen(self, screen):
-        screen.blit(self.surface, self.rect)

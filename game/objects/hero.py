@@ -130,6 +130,3 @@ class Hero(BaseGameObject):
                     self.rect.y = item.rect.y + item.rect.h
                     self.speedy = 0
                     self.pos.y = self.rect.y
-
-    def put_on_screen(self, screen):
-        screen.blit(self.surface, self.rect)

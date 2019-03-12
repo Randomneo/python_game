@@ -7,5 +7,6 @@ class BaseGameObject(object):
 
     def destroy(self):
         if not self.object_manager:
-            print('No object manager to destroy object')
+            print('FATAL ERROR: No object manager to destroy object')
+            exit(1)
         self.object_manager.destroy_object(self)

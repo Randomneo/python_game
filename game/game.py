@@ -51,7 +51,6 @@ def start():
         hero.update_pos(keys, platforms, time_delta)
         hero.update_anim(time_delta)
         camera.update_pos()
-        print(obj_manager.to_draw.objects)
 
         screen.fill(Colors.black.value)
         camera.draw(obj_manager.to_draw.objects)

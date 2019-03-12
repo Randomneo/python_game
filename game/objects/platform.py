@@ -25,6 +25,3 @@ class Platform(BaseGameObject):
         self.last_frame_time = 0
 
         self.surface.blit(self.spritesheet, (0, 0))
-
-    def put_on_screen(self, screen):
-        screen.blit(self.surface, self.rect)
