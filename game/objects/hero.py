@@ -3,8 +3,8 @@ from pygame import Rect
 from pygame.image import load as load_img
 from pygame.transform import flip
 import pygame
-from .. import Colors
 from .. import screen_size, gravity
+from .base import BaseGameObject
 from .position import Position
 
 
@@ -14,7 +14,7 @@ walking_sprites = (
 )
 
 
-class Hero(object):
+class Hero(BaseGameObject):
     size = (61, 70)
     image_path = 'game/res/hero_spritesheet.png'
     frames = {
@@ -32,6 +32,7 @@ class Hero(object):
     pos = Position()
 
     def __init__(self, start_pos=Position(x=100, y=100)):
+        super().__init__()
         self.surface = Surface(self.size, SRCALPHA)
 
         self.spritesheet = load_img(self.image_path)

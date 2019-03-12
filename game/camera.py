@@ -6,24 +6,20 @@ from . import map_size, screen_size
 
 class Camera(object):
 
-    def __init__(self, hero, screen):
+    def __init__(self, screen, center_obj=None):
         self.pos = Position
-        self.hero = hero
         self.screen = screen
         self.screen_size = Vector2(screen_size[0], screen_size[1])
         self.map_maxs = map_size
-        self.to_draw = []
+        self.center_obj = center_obj
 
-    def add_object_to_draw(self, object):
-        self.to_draw.append(object)
-
-    def add_objects_to_draw(self, objects):
-        self.to_draw = [*self.to_draw, *objects]
+    def set_center_obj(self, obj):
+        self.center_obj = obj
 
     def update_pos(self, center_on_hero=True):
-        if center_on_hero:
-            x = self.hero.pos.x - float(self.screen_size.x)/2
-            y = self.hero.pos.y - float(self.screen_size.y)/2
+        if self.center_obj:
+            x = self.center_obj.pos.x - float(self.screen_size.x)/2
+            y = self.center_obj.pos.y - float(self.screen_size.y)/2
 
         if x < 0:
             x = 0
@@ -37,8 +33,8 @@ class Camera(object):
         self.pos.x = x
         self.pos.y = y
 
-    def draw(self):
-        for o in self.to_draw:
+    def draw(self, to_draw):
+        for o in to_draw:
             self.screen.blit(
                 o.surface,
                 (
