@@ -29,9 +29,7 @@ class Camera(object):
                 + int(self.center_obj.size[1]/2)\
                 - float(self.screen_size.y)/2
 
-        print('prev:', prev_pos, dest_pos)
         dest_pos = Position.smooth_move(prev_pos, dest_pos)
-        print('afte:', prev_pos, dest_pos)
         dest_pos.put_in_rect(
             0,
             0,
@@ -39,7 +37,6 @@ class Camera(object):
             self.map_maxs.y - self.screen_size.y,
         )
         self.pos = dest_pos
-
 
     def draw(self, to_draw):
         for o in to_draw:

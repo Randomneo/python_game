@@ -7,15 +7,22 @@ class Vector2(object):
         self.x *= scalar
         self.y *= scalar
 
+    def quad_mult(self, scalar, param):
+        self.x = self.x * (scalar / max(param/self.x, 1))
+        self.y = self.y * (scalar / max(param/self.y, 1))
+
+    def normalize(self):
+        pass
+
     def __add__(self, other):
         x = self.x + other.x
         y = self.y + other.y
-        return Vector2(x=x, y=y)
+        return self.__class__(x=x, y=y)
 
     def __sub__(self, other):
         x = self.x - other.x
         y = self.y - other.y
-        return Vector2(x=x, y=y)
+        return self.__class__(x=x, y=y)
 
     def __str__(self):
         return 'x={} y={}'.format(self.x, self.y)
