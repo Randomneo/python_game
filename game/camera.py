@@ -7,7 +7,7 @@ from . import map_size, screen_size
 class Camera(object):
 
     def __init__(self, screen, center_obj=None):
-        self.pos = Position
+        self.pos = Position()
         self.screen = screen
         self.screen_size = Vector2(screen_size[0], screen_size[1])
         self.map_maxs = map_size
@@ -17,21 +17,29 @@ class Camera(object):
         self.center_obj = obj
 
     def update_pos(self, center_on_hero=True):
+        prev_pos = self.pos
+        dest_pos = Position()
         if self.center_obj:
-            x = self.center_obj.pos.x - float(self.screen_size.x)/2
-            y = self.center_obj.pos.y - float(self.screen_size.y)/2
+            dest_pos.x =\
+                self.center_obj.pos.x\
+                + int(self.center_obj.size[0]/2)\
+                - float(self.screen_size.x)/2
+            dest_pos.y =\
+                self.center_obj.pos.y\
+                + int(self.center_obj.size[1]/2)\
+                - float(self.screen_size.y)/2
 
-        if x < 0:
-            x = 0
-        if y < 0:
-            y = 0
-        if x + self.screen_size.x > self.map_maxs.x:
-            x = self.map_maxs.x - self.screen_size.x
-        if y + self.screen_size.y > self.map_maxs.y:
-            y = self.map_maxs.y - self.screen_size.y
+        print('prev:', prev_pos, dest_pos)
+        dest_pos = Position.smooth_move(prev_pos, dest_pos)
+        print('afte:', prev_pos, dest_pos)
+        dest_pos.put_in_rect(
+            0,
+            0,
+            self.map_maxs.x - self.screen_size.x,
+            self.map_maxs.y - self.screen_size.y,
+        )
+        self.pos = dest_pos
 
-        self.pos.x = x
-        self.pos.y = y
 
     def draw(self, to_draw):
         for o in to_draw:
