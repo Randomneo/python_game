@@ -17,17 +17,18 @@ class Camera(object):
         self.center_obj = obj
 
     def update_pos(self, center_on_hero=True):
+        if not self.center_obj or not center_on_hero:
+            return
         prev_pos = self.pos
-        dest_pos = Position()
-        if self.center_obj:
-            dest_pos.x =\
-                self.center_obj.pos.x\
-                + int(self.center_obj.size[0]/2)\
-                - float(self.screen_size.x)/2
-            dest_pos.y =\
-                self.center_obj.pos.y\
-                + int(self.center_obj.size[1]/2)\
-                - float(self.screen_size.y)/2
+        dest_pos = self.center_obj.view_point
+        dest_pos.x =\
+            dest_pos.x\
+            + int(self.center_obj.size.x/2)\
+            - float(self.screen_size.x)/2
+        dest_pos.y =\
+            dest_pos.y\
+            + int(self.center_obj.size.y/2)\
+            - float(self.screen_size.y)/2
 
         dest_pos = Position.smooth_move(prev_pos, dest_pos)
         dest_pos.put_in_rect(
@@ -41,7 +42,7 @@ class Camera(object):
     def draw(self, to_draw):
         for o in to_draw:
             self.screen.blit(
-                o.surface,
+                o.animator.surface,
                 (
                     o.rect.x - self.pos.x,
                     o.rect.y - self.pos.y,

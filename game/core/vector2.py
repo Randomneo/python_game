@@ -8,11 +8,17 @@ class Vector2(object):
         self.y *= scalar
 
     def quad_mult(self, scalar, param):
+        if self.x == 0 or self.y == 0:
+            return
         self.x = self.x * (scalar / max(param/self.x, 1))
         self.y = self.y * (scalar / max(param/self.y, 1))
 
     def normalize(self):
         pass
+
+    @property
+    def get_t(self):
+        return (self.x, self.y)
 
     def __add__(self, other):
         x = self.x + other.x
