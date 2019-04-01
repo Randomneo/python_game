@@ -15,17 +15,9 @@ walking_sprites = (
 
 
 class Hero(BaseGameObject):
-    image_path = 'game/res/hero_spritesheet.png'
-    frames = {
-        'stay': 8,
-        'walk': 6,
-        'jump': 2,
-    }
-    animation_speed = 1.0/10
     speedx = 400
     speedy = 0
     on_gorund = False
-    flipx = False
     on_walk = False
     anim_jump = False
 
@@ -33,12 +25,17 @@ class Hero(BaseGameObject):
         super().__init__()
         self.size.x = 61
         self.size.y = 71
+        self.is_animated = True
+        self.is_hero = True
         self.pos = start_pos
         self.rect = pyRect(
             self.pos.x, self.pos.y,
             self.size.x, self.size.y
             )
-        self.animator = Animator(self.image_path, size=self.size)
+
+    def load(self, rows_path, image_path):
+        self.animator = Animator(image_path, size=self.size)
+        self.animator.load(rows_path)
         frames_row = FrameRow()
         frames_row.speed = 1.0/10
         for i in range(8):

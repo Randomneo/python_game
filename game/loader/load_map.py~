@@ -1,0 +1,22 @@
+'''
+defend blocks with `--`
+in next lines describe game object:
+  name (hero, bullet, platform, plattfrom_map, platfrom_list, etc.)
+  path to file with spritesheet description (rows and posotions of frames)
+  path to spritesheet
+'''
+from ..objects.hero import Hero
+
+
+class LoadMap(object):
+
+    def __init__(self, level_file):
+        with open(level_file, 'r') as f:
+            self.level_text = f.read()
+
+    def load(self, object_manager):
+        for entity in self.level_text.split('--')[1:]:
+            obj = [t for t in entity.split('\n') if t and not t.isspace()]
+            if obj[0] == 'hero':
+                hero = Hero()
+                hero.load(*obj[1:])

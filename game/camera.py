@@ -40,11 +40,11 @@ class Camera(object):
         self.pos = dest_pos
 
     def draw(self, to_draw):
-        for o in to_draw:
+        for obj in to_draw:
             self.screen.blit(
-                o.animator.surface,
+                obj.animator.surface,
                 (
-                    o.rect.x - self.pos.x,
-                    o.rect.y - self.pos.y,
+                    obj.rect.x - self.pos.x,
+                    obj.rect.y - self.pos.y,
                 )
             )

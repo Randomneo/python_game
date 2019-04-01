@@ -7,6 +7,9 @@ class BaseGameObject(object):
     def __init__(self):
         self.is_drawable = True
         self.is_movable = False
+        self.is_animated = False
+        self.is_interact_with_hero = False
+        self.is_hero = False
         self.object_manager = None
         self.pos = Position()
         self.size = Vector2()

@@ -12,6 +12,7 @@ class Platform(BaseGameObject):
 
     def __init__(self, start_pos):
         super().__init__()
+        self.is_interact_with_hero = True
         self.size.x = 50
         self.size.y = 20
         self.pos = start_pos

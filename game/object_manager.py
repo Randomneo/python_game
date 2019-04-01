@@ -21,17 +21,33 @@ class ObjectManager(object):
     def __init__(self):
         self.to_draw = ObjectList()
         self.to_update_pos = ObjectList()
+        self.to_update_anim = ObjectList()
+        self.interact_with_hero = ObjectList()
+        self.hero = None
 
-    def load_objcet(self, obj):
+        self.all_lists = [
+            self.to_draw,
+            self.to_update_pos,
+            self.to_update_anim,
+            self.interact_with_hero,
+        ]
+
+    def load_object(self, obj):
         if callable(obj):
             obj = obj()
 
         # TODO: check if obj is game object and have all base functions
         obj.object_manager = self
+        if obj.is_hero:
+            self.hero = obj
         if obj.is_drawable:
             self.to_draw.add_item(obj)
         if obj.is_movable:
             self.to_update_pos.add_item(obj)
+        if obj.is_animated:
+            self.to_update_anim.add_item(obj)
+        if obj.is_interact_with_hero:
+            self.to_update_anim.add_item(obj)
 
     def load_list(self, obj_list, is_drawable=True, is_movable=False):
         for obj in obj_list:
@@ -40,7 +56,14 @@ class ObjectManager(object):
                 self.to_draw.add_item(obj)
             if obj.is_movable:
                 self.to_update_pos.add_item(obj)
+            if obj.is_animated:
+                self.to_update_anim.add_item(obj)
+            if obj.is_interact_with_hero:
+                self.interact_with_hero.add_item(obj)
 
     def destroy_object(self, obj):
-        self.to_draw.remove_item(obj)
-        self.to_update_pos.remove_item(obj)
+        for l in self.all_lists:
+            if obj in l:
+                l.remove_item(obj)
+            if obj is hero:
+                self.hero = None
