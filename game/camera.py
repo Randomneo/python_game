@@ -17,6 +17,7 @@ class Camera(object):
         self.center_obj = obj
 
     def update_pos(self, center_on_hero=True):
+
         if not self.center_obj or not center_on_hero:
             return
         prev_pos = self.pos
