@@ -1,4 +1,7 @@
-class ObjectList(object):
+from .objects.hero import Hero
+from .camera import Camera
+
+class ObjectList(list):
 
     def __init__(self):
         self.objects = []
@@ -24,6 +27,7 @@ class ObjectManager(object):
         self.to_update_anim = ObjectList()
         self.interact_with_hero = ObjectList()
         self.hero = None
+        self.camera = Camera()
 
         self.all_lists = [
             self.to_draw,
@@ -65,5 +69,8 @@ class ObjectManager(object):
         for l in self.all_lists:
             if obj in l:
                 l.remove_item(obj)
-            if obj is hero:
+            if obj is Hero:
                 self.hero = None
+
+    def draw(self):
+        self.camera.draw(self.to_draw.objects)

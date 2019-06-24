@@ -14,11 +14,11 @@ class LoadMap(object):
         with open(level_file, 'r') as f:
             self.level_text = f.read()
 
-    def load(self, object_manager, camera):
+    def load(self, object_manager):
         for entity in self.level_text.split('--')[1:]:
             obj = [t for t in entity.split('\n') if t and not t.isspace()]
             if obj[0] == 'hero':
                 hero = Hero()
                 hero.load(*obj[1:])
-                camera.center_obj = hero
+                object_manager.camera.center_obj = hero
                 object_manager.load_object(hero)

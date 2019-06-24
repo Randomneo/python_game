@@ -16,10 +16,10 @@ def start():
     pygame.init()
     obj_manager = ObjectManager()
     screen = pygame.display.set_mode(screen_size)
-    camera = Camera(screen)
 
     level = LoadMap('./game/res/level.lvl')
-    level.load(obj_manager, camera)
+    level.load(obj_manager)
+    obj_manager.camera.screen = screen
     platforms = []
     for i in range(10):
         platforms.append(Platform(Position(x=0+i*50, y=300)))
@@ -52,8 +52,8 @@ def start():
         for item in obj_manager.to_update_anim.objects:
             item.update_anim(time_delta)
         obj_manager.hero.update_pos(keys, obj_manager.interact_with_hero.objects, time_delta)
-        camera.update_pos()
+        obj_manager.camera.update_pos()
 
         screen.fill(Colors.black.value)
-        camera.draw(obj_manager.to_draw.objects)
+        obj_manager.draw()
         pygame.display.flip()

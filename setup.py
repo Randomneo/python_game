@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='game',
@@ -11,5 +11,8 @@ setup(
         'pygame==1.9.1release',
         'enum34',
     ],
-    console=['main.py']
+    install_requires=[
+        'pygame',
+    ],
+    console=['main.py'],
 )

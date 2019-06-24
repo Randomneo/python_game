@@ -6,9 +6,9 @@ from . import map_size, screen_size
 
 class Camera(object):
 
-    def __init__(self, screen, center_obj=None):
+    def __init__(self, center_obj=None):
         self.pos = Position()
-        self.screen = screen
+        self.screen = None
         self.screen_size = Vector2(screen_size[0], screen_size[1])
         self.map_maxs = map_size
         self.center_obj = center_obj
@@ -41,6 +41,8 @@ class Camera(object):
         self.pos = dest_pos
 
     def draw(self, to_draw):
+        if not self.screen:
+            raise AttributeError('Not setted screen')
         for obj in to_draw:
             self.screen.blit(
                 obj.animator.surface,
